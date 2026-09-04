@@ -95,7 +95,7 @@ function db_users_ensure_table_exists() {
 
     $sql = 'CREATE TABLE IF NOT EXISTS `' . $table . '` (' .
         '`id` integer NOT NULL PRIMARY KEY AUTOINCREMENT,' .
-        '`user_login` varchar(64) NOT NULL UNIQUE KEY,' .
+        '`user_login` varchar(64) NOT NULL UNIQUE,' .
         '`user_pass` varchar(255) NOT NULL,' .
         '`user_role` varchar(20) NOT NULL DEFAULT \'user\',' .
         '`email` varchar(255) DEFAULT NULL,' .
