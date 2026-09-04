@@ -4,7 +4,7 @@ Plugin Name: Better User Management for YouRLs
 Plugin URI: https://github.com/mrichwalsky/yourls-dbuser-with-comms
 Description: Enhanced user management for YOURLS with email support, temporary password generation, and password reset functionality. A fork of https://github.com/RayHollister/database-users-for-YOURLS that adds email notifications and improved security features including temporary password generation and mbanner promoting password reset on first login.
 Version: 2.0.0
-Author: Gas Mark 8, Ltd.
+Author: Gas Mark 8, Ltd. - slight modification by Christopher McAvaney
 Author URI: https://gasmark8.com
 */
 
