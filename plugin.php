@@ -94,17 +94,15 @@ function db_users_ensure_table_exists() {
     $table = db_users_table_name();
 
     $sql = 'CREATE TABLE IF NOT EXISTS `' . $table . '` (' .
-        '`id` int unsigned NOT NULL AUTO_INCREMENT,' .
-        '`user_login` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,' .
-        '`user_pass` varchar(255) COLLATE utf8mb4_bin NOT NULL,' .
-        '`user_role` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT \'user\',' .
-        '`email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,' .
+        '`id` integer NOT NULL PRIMARY KEY AUTOINCREMENT,' .
+        '`user_login` varchar(64) NOT NULL UNIQUE KEY,' .
+        '`user_pass` varchar(255) NOT NULL,' .
+        '`user_role` varchar(20) NOT NULL DEFAULT \'user\',' .
+        '`email` varchar(255) DEFAULT NULL,' .
         '`needs_password_reset` tinyint(1) NOT NULL DEFAULT 0,' .
-        '`created_at` datetime NOT NULL,' .
-        '`updated_at` datetime NOT NULL,' .
-        'PRIMARY KEY (`id`),' .
-        'UNIQUE KEY `user_login` (`user_login`)' .
-    ') DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;';
+        '`created_at` text NOT NULL,' .
+        '`updated_at` text NOT NULL,' .
+    ');';
 
     try {
         db_users_db()->perform( $sql );
@@ -133,10 +131,8 @@ function db_users_migrate_schema() {
     try {
         // Check if email column exists
         $email_exists = db_users_db()->fetchValue(
-            "SELECT COUNT(*) FROM information_schema.COLUMNS 
-             WHERE TABLE_SCHEMA = DATABASE() 
-             AND TABLE_NAME = :table 
-             AND COLUMN_NAME = 'email'",
+			"SELECT COUNT(*) FROM pragma_table_info(:table)
+			 WHERE name = 'email'",
             [ 'table' => $table ]
         );
 
@@ -147,10 +143,8 @@ function db_users_migrate_schema() {
 
         // Check if needs_password_reset column exists
         $reset_exists = db_users_db()->fetchValue(
-            "SELECT COUNT(*) FROM information_schema.COLUMNS 
-             WHERE TABLE_SCHEMA = DATABASE() 
-             AND TABLE_NAME = :table 
-             AND COLUMN_NAME = 'needs_password_reset'",
+			"SELECT COUNT(*) FROM pragma_table_info(:table)
+			 WHERE name = 'needs_password_reset'",
             [ 'table' => $table ]
         );
 
@@ -165,7 +159,7 @@ function db_users_migrate_schema() {
 
         return $migrated;
     } catch ( \Exception $e ) {
-        // Fallback: try simpler ALTER TABLE without information_schema check
+        // Fallback: try simpler ALTER TABLE without pragma_table_info check
         try {
             db_users_db()->perform( "ALTER TABLE `$table` ADD COLUMN `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL" );
             $migrated = true;
