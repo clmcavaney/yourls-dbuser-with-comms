@@ -101,7 +101,7 @@ function db_users_ensure_table_exists() {
         '`email` varchar(255) DEFAULT NULL,' .
         '`needs_password_reset` tinyint(1) NOT NULL DEFAULT 0,' .
         '`created_at` text NOT NULL,' .
-        '`updated_at` text NOT NULL,' .
+        '`updated_at` text NOT NULL' .
     ');';
 
     try {
