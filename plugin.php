@@ -241,6 +241,13 @@ function db_users_refresh_credentials_cache() {
         foreach( $rows as $row ) {
             $credentials[ $row->user_login ] = $row->user_pass;
             $roles[ $row->user_login ]       = $row->user_role;
+
+			// TODO add other AMP roles into this plugin: administrator, editor, contributor, anonymous
+			if( $row->user_role == 'admin' ) {
+				// convert admin to administrator
+				$role = $row->user_role == 'admin' ? 'administrator';
+				$GLOBALS['amp_role_assignment'][$role][] = $row->user_login;
+			}
         }
     }
 
