@@ -245,7 +245,7 @@ function db_users_refresh_credentials_cache() {
 			// TODO add other AMP roles into this plugin: administrator, editor, contributor, anonymous
 			if( $row->user_role == 'admin' ) {
 				// convert admin to administrator
-				$role = $row->user_role == 'admin' ? 'administrator';
+				$role = $row->user_role == 'admin' ? 'administrator' : 'unknown';
 				$GLOBALS['amp_role_assignment'][$role][] = $row->user_login;
 			}
         }
@@ -277,7 +277,11 @@ function db_users_initialize_credentials_cache( $force_refresh = false ) {
         $roles       = isset( $payload['roles'] ) && is_array( $payload['roles'] ) ? $payload['roles'] : [];
 
         $GLOBALS['yourls_user_passwords'] = $credentials;
-        $GLOBALS['db_users_roles']         = $roles;
+        $GLOBALS['db_users_roles']        = $roles;
+
+		foreach( $roles as $email => $role ) {
+			$GLOBALS['amp_role_assignment'][$role][] = $email;
+		}
 
         return $credentials;
     }
