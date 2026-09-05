@@ -280,7 +280,13 @@ function db_users_initialize_credentials_cache( $force_refresh = false ) {
         $GLOBALS['db_users_roles']        = $roles;
 
 		foreach( $roles as $email => $role ) {
-			$GLOBALS['amp_role_assignment'][$role][] = $email;
+			if( $role == 'admin' ) {
+				// convert admin to administrator
+				$_role = $role == 'admin' ? 'administrator' : 'unknown';
+			} else {
+				$_role = $role;
+			}
+			$GLOBALS['amp_role_assignment'][$_role][] = $email;
 		}
 
         return $credentials;
